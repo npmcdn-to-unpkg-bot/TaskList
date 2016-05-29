@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TaskList.Models;
+using Microsoft.EntityFrameworkCore;
+using TaskList.Repositories;
 
 namespace TaskList
 {
@@ -29,13 +32,28 @@ namespace TaskList
         {
             // Add framework services.
             services.AddMvc();
+
+            services.AddTransient<TaskListDbContext>();
+            services.AddTransient<ListRepository>();
+            services.AddTransient<TaskRepository>();
+
+            var connection = @"Server=.\SQLEXPRESS;Database=TaskList;Trusted_Connection=True;";
+            services.AddDbContext<TaskListDbContext>(options => options.UseSqlServer(connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
             app.UseMvc();
         }
