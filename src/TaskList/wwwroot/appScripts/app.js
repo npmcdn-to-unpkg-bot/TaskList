@@ -47,7 +47,6 @@ let AppComponent = class AppComponent {
     }
     addTaskModal(listId, listIndex) {
         this.showAddTaskModal = true;
-        //this.newTaskName.focus();
         this.showDeleteTask = false;
         this.selectedList.id = listId;
         this.selectedList.listIndex = listIndex;
@@ -85,39 +84,7 @@ let AppComponent = class AppComponent {
 AppComponent = __decorate([
     core_1.Component({
         selector: 'my-app',
-        template: `<h1>Task List</h1>
-                <ul class="lists" >
-                    <li *ngFor="let list of lists; let listIndex = index" class="list">
-                    {{list.Name}} <button type="button" (click)="addTaskModal(list.Id, listIndex)">Add task</button>
-
-                        <ul *ngIf="list.Tasks.length > 0">
-                            <li *ngFor="let task of list.Tasks; let taskIndex = index">
-                            {{task.Name}}
-                            <button type="button" (click)="showDeleteTaskModal(task, listIndex, taskIndex)">Delete {{task.Name}}</button>
-                            </li>
-                        </ul>                 
-                    </li>
-                <ul>
-<div *ngIf="showDeleteTask">
-<h2>Task:{{selectedTask.Name}}</h2>
-<h3>Are you sure you want to delete the task?</h3>
-<button type="button" (click)="deleteTask(selectedTask)">Yes</button>
-<button type="button" (click)="hideDeleteTaskModal()">No</button>
-</div>
-
-<div *ngIf="showAddTaskModal">
-<form (ngSubmit)="addTask(newTask)" #newTaskForm="ngForm">
-<input [(ngModel)]="newTask.Name" #newTaskName required />
-<button type="button" (click)="addTask(newTask)" [disabled]="!newTaskForm.form.valid">Add Task</button>
-</form>
-</div>
-
-<form (ngSubmit)="addList(newList)" #newListForm="ngForm" style="margin-top:30px;">
-<input [(ngModel)]="newList.Name" required />
-<button type="button" (click)="addList(newList)" [disabled]="!newListForm.form.valid">Add List</button>
-</form>
-
-`,
+        templateUrl: './app.html',
         providers: [list_service_1.ListService, task_service_1.TaskService]
     }), 
     __metadata('design:paramtypes', [list_service_1.ListService, task_service_1.TaskService])

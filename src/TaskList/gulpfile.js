@@ -30,6 +30,8 @@ gulp.task("scriptsNStyles", () => {
     gulp.src([
         'node_modules/bootstrap/dist/css/bootstrap.css'
     ]).pipe(gulp.dest('./wwwroot/libs/css'));
+
+    gulp.src(['scripts/*.html']).pipe(gulp.dest('./wwwroot/'));
 });
 
 var tsProject = ts.createProject('scripts/tsconfig.json');
