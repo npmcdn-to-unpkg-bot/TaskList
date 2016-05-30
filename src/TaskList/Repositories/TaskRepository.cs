@@ -46,6 +46,7 @@ namespace TaskList.Repositories
         {
 
             task.DateCreated = DateTime.Now;
+            task.Id = 0; 
 
             _context.Tasks.Add(task);
             _context.SaveChanges();

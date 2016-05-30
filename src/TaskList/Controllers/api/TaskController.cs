@@ -15,7 +15,8 @@ namespace TaskList.Controllers.api
     {
         private TaskRepository _taskRepo;
 
-        public TaskController(TaskRepository taskRepo) {
+        public TaskController(TaskRepository taskRepo)
+        {
             _taskRepo = taskRepo;
         }
 
@@ -37,14 +38,15 @@ namespace TaskList.Controllers.api
         [HttpPost("name/{name}/listId/{listId}")]
         public Models.Task Post(string name, int listId)
         {
-            var task = new Models.Task() {
+            var task = new Models.Task()
+            {
                 Name = name,
                 DateCreated = DateTime.Now,
                 IsDeleted = false,
                 ListId = listId
-            };   
-            var newTask =          _taskRepo.Add(task);
-            return newTask;
+            };
+            return _taskRepo.Add(task);
+
         }
 
         // PUT api/task/5

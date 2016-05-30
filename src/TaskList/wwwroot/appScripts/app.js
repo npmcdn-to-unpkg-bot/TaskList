@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 const core_1 = require('@angular/core');
+const list_1 = require('./list');
 const task_1 = require('./task');
 const list_service_1 = require('./list.service');
 const task_service_1 = require('./task.service');
@@ -23,6 +24,7 @@ let AppComponent = class AppComponent {
             listIndex: 0
         };
         this.newTask = new task_1.Task();
+        this.newList = new list_1.List();
     }
     ngOnInit() {
         this.getLists();
@@ -45,6 +47,7 @@ let AppComponent = class AppComponent {
     }
     addTaskModal(listId, listIndex) {
         this.showAddTaskModal = true;
+        //this.newTaskName.focus();
         this.showDeleteTask = false;
         this.selectedList.id = listId;
         this.selectedList.listIndex = listIndex;
@@ -70,12 +73,20 @@ let AppComponent = class AppComponent {
             delete this.lists[task.listIndex].Tasks.splice(task.taskIndex, 1);
         });
     }
+    addList(newList) {
+        this.listService.AddList(newList)
+            .then(res => {
+            this.lists.push(newList);
+            this.newList = new list_1.List();
+            this.newList.Name = '';
+        });
+    }
 };
 AppComponent = __decorate([
     core_1.Component({
         selector: 'my-app',
-        template: `<h3>My First Angular 2 App 1</h3>
-                <ul class="lists">
+        template: `<h1>Task List</h1>
+                <ul class="lists" >
                     <li *ngFor="let list of lists; let listIndex = index" class="list">
                     {{list.Name}} <button type="button" (click)="addTaskModal(list.Id, listIndex)">Add task</button>
 
@@ -96,10 +107,15 @@ AppComponent = __decorate([
 
 <div *ngIf="showAddTaskModal">
 <form (ngSubmit)="addTask(newTask)" #newTaskForm="ngForm">
-<input [(ngModel)]="newTask.Name" required />
+<input [(ngModel)]="newTask.Name" #newTaskName required />
 <button type="button" (click)="addTask(newTask)" [disabled]="!newTaskForm.form.valid">Add Task</button>
 </form>
 </div>
+
+<form (ngSubmit)="addList(newList)" #newListForm="ngForm" style="margin-top:30px;">
+<input [(ngModel)]="newList.Name" required />
+<button type="button" (click)="addList(newList)" [disabled]="!newListForm.form.valid">Add List</button>
+</form>
 
 `,
         providers: [list_service_1.ListService, task_service_1.TaskService]

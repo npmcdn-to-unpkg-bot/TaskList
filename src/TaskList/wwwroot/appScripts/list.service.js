@@ -20,6 +20,22 @@ let ListService = class ListService {
         return this.http.get('api/list')
             .map((res) => res.json());
     }
+    AddList(list) {
+        let headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+        let options = new http_1.RequestOptions({ headers: headers });
+        return this.http.post('api/list/name/' + list.Name + '', '', options)
+            .map(this.extractData)
+            .toPromise()
+            .catch(this.handleError);
+    }
+    handleError(error) {
+        console.error('An error occurred', error);
+        return Promise.reject(error.message || error);
+    }
+    extractData(res) {
+        let body = res.json();
+        return body.data || {};
+    }
 };
 ListService = __decorate([
     core_1.Injectable(), 

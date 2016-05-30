@@ -35,10 +35,15 @@ namespace TaskList.Controllers.api
         }
 
         // POST api/list
-        [HttpPost]
-        public void Post([FromBody]List list)
+        [HttpPost("name/{name}")]
+        public List Post(string name)
         {
-            _listRepo.Add(list);
+            var list = new List() {
+                Name = name,
+                DateCreated = DateTime.Now,
+                IsDeleted = false
+            };
+           return  _listRepo.Add(list);
         }
 
         // PUT api/list/5

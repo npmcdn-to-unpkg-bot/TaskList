@@ -7,8 +7,8 @@ import {TaskService} from './task.service';
 
 @Component({
     selector: 'my-app',
-    template: `<h3>My First Angular 2 App 1</h3>
-                <ul class="lists">
+    template: `<h1>Task List</h1>
+                <ul class="lists" >
                     <li *ngFor="let list of lists; let listIndex = index" class="list">
                     {{list.Name}} <button type="button" (click)="addTaskModal(list.Id, listIndex)">Add task</button>
 
@@ -29,10 +29,15 @@ import {TaskService} from './task.service';
 
 <div *ngIf="showAddTaskModal">
 <form (ngSubmit)="addTask(newTask)" #newTaskForm="ngForm">
-<input [(ngModel)]="newTask.Name" required />
+<input [(ngModel)]="newTask.Name" #newTaskName required />
 <button type="button" (click)="addTask(newTask)" [disabled]="!newTaskForm.form.valid">Add Task</button>
 </form>
 </div>
+
+<form (ngSubmit)="addList(newList)" #newListForm="ngForm" style="margin-top:30px;">
+<input [(ngModel)]="newList.Name" required />
+<button type="button" (click)="addList(newList)" [disabled]="!newListForm.form.valid">Add List</button>
+</form>
 
 `,
     providers: [ListService, TaskService]
@@ -47,6 +52,7 @@ export class AppComponent implements OnInit {
         listIndex: 0
     };
     newTask = new Task();
+    newList = new List();
 
     constructor(
         private listService: ListService,
@@ -79,6 +85,7 @@ export class AppComponent implements OnInit {
 
     addTaskModal(listId: number, listIndex: number) {
         this.showAddTaskModal = true;
+        //this.newTaskName.focus();
         this.showDeleteTask = false;
         this.selectedList.id = listId;
         this.selectedList.listIndex = listIndex;
@@ -105,6 +112,18 @@ export class AppComponent implements OnInit {
                 this.selectedTask = null;
                 delete this.lists[task.listIndex].Tasks.splice(task.taskIndex, 1);
             });
+    }
+
+    addList(newList: List) {
+        
+        this.listService.AddList(newList)
+            .then(res => {
+                this.lists.push(newList);
+                this.newList = new List();
+                this.newList.Name = '';
+            })
+            
+
     }
 
 
