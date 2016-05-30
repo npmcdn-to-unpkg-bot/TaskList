@@ -4,6 +4,7 @@
     IsDeleted: boolean;
     DateCreated: any;
     ListId: number;
+    IsCompleted: boolean;
     taskIndex: number;
     listIndex: number;
 
@@ -13,6 +14,7 @@
         this.IsDeleted = false;
         this.DateCreated = '';
         this.ListId = 0;
+        this.IsCompleted = false;
         this.taskIndex = 0;
         this.listIndex = 0;
     }

@@ -7,7 +7,7 @@ import {TaskService} from './task.service';
 
 @Component({
     selector: 'my-app',
-    templateUrl:'./app.html',
+    templateUrl: './app.html',
     providers: [ListService, TaskService]
 })
 export class AppComponent implements OnInit {
@@ -32,11 +32,8 @@ export class AppComponent implements OnInit {
         var showDeleteTask = false;
     }
 
-    getLists() {
-        this.listService.getLists()
-            .subscribe(lists => this.lists = lists);
-    }
 
+    // Tasks
     showDeleteTaskModal(task: Task, listIndex: number, taskIndex: number) {
 
         this.showDeleteTask = true;
@@ -81,18 +78,33 @@ export class AppComponent implements OnInit {
             });
     }
 
+    completeTask(task: Task) {
+        this.taskService.complete(task)
+            .then(res => {
+                task.IsCompleted = true;
+            });
+    }
+    uncompleteTask(task: Task) {
+        this.taskService.uncomplete(task)
+            .then(res => {
+            task.IsCompleted = false;
+        });;
+    }
+    
+
+
+    // Lists
+    getLists() {
+        this.listService.getLists()
+            .subscribe(lists => this.lists = lists);
+    }
+
     addList(newList: List) {
-        
         this.listService.AddList(newList)
             .then(res => {
                 this.lists.push(newList);
                 this.newList = new List();
                 this.newList.Name = '';
             })
-            
-
     }
-
-
-
 }

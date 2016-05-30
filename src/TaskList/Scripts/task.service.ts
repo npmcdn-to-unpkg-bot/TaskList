@@ -25,7 +25,7 @@ export class TaskService {
 
         let body = JSON.stringify(task);
         let headers = new Headers({ 'Content-Type': 'application/json' });
-        let options = new RequestOptions({ headers: headers, body: body });
+        let options = new RequestOptions({ headers: headers });
         let url = 'api/task/name/' + task.Name + '/listId/' + task.ListId + '';
         return this.http.post(url, body, options)
             .map(this.extractData)
@@ -41,6 +41,32 @@ export class TaskService {
 
         return this.http
             .delete(url, headers)
+            .toPromise()
+            .catch(this.handleError);
+    }
+
+    complete(task: Task) {
+       
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        let url = `api/task/complete/${task.Id}`;
+
+        return this.http
+            .put(url, '', options)
+            .toPromise()
+            .catch(this.handleError);
+    }
+
+    uncomplete(task: Task) {
+
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        let url = `api/task/uncomplete/${task.Id}`;
+
+        return this.http
+            .put(url, '', options)
             .toPromise()
             .catch(this.handleError);
     }

@@ -61,5 +61,17 @@ namespace TaskList.Controllers.api
         {
             _taskRepo.Delete(id);
         }
+
+        [HttpPut("complete/{id}")]
+        public void CompleteTask(int id)
+        {
+            _taskRepo.Complete(id);
+        }
+
+        [HttpPut("uncomplete/{id}")]
+        public void UnCompleteTask(int id)
+        {
+            _taskRepo.UnComplete(id);
+        }
     }
 }

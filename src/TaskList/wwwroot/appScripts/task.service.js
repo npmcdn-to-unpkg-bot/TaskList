@@ -26,7 +26,7 @@ let TaskService = class TaskService {
         task.ListId = listId;
         let body = JSON.stringify(task);
         let headers = new http_1.Headers({ 'Content-Type': 'application/json' });
-        let options = new http_1.RequestOptions({ headers: headers, body: body });
+        let options = new http_1.RequestOptions({ headers: headers });
         let url = 'api/task/name/' + task.Name + '/listId/' + task.ListId + '';
         return this.http.post(url, body, options)
             .map(this.extractData)
@@ -39,6 +39,24 @@ let TaskService = class TaskService {
         let url = `api/task/${task.Id}`;
         return this.http
             .delete(url, headers)
+            .toPromise()
+            .catch(this.handleError);
+    }
+    complete(task) {
+        let headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+        let options = new http_1.RequestOptions({ headers: headers });
+        let url = `api/task/complete/${task.Id}`;
+        return this.http
+            .put(url, '', options)
+            .toPromise()
+            .catch(this.handleError);
+    }
+    uncomplete(task) {
+        let headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+        let options = new http_1.RequestOptions({ headers: headers });
+        let url = `api/task/uncomplete/${task.Id}`;
+        return this.http
+            .put(url, '', options)
             .toPromise()
             .catch(this.handleError);
     }

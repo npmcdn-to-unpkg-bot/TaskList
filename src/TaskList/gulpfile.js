@@ -19,17 +19,15 @@ gulp.task("scriptsNStyles", () => {
             'reflect-metadata/Reflect.js',
             'rxjs/**',
             'zone.js/dist/**',
-            '@angular/**',
-            'jquery/dist/jquery.*js',
-            'bootstrap/dist/js/bootstrap.*js',
+            '@angular/**'
     ], {
         cwd: "node_modules/**"
     })
         .pipe(gulp.dest("./wwwroot/libs"));
 
-    gulp.src([
-        'node_modules/bootstrap/dist/css/bootstrap.css'
-    ]).pipe(gulp.dest('./wwwroot/libs/css'));
+    //gulp.src([
+    //    'node_modules/bootstrap/dist/css/bootstrap.css'
+    //]).pipe(gulp.dest('./wwwroot/libs/css'));
 
     gulp.src(['scripts/*.html']).pipe(gulp.dest('./wwwroot/'));
 });
@@ -44,10 +42,14 @@ gulp.task('ts', function (done) {
     return tsResult.js.pipe(gulp.dest('./wwwroot/appScripts'));
 });
 
-gulp.task('watch', ['watch.ts']);
+gulp.task('watch', ['watch.ts','watch.html']);
 
 gulp.task('watch.ts', ['ts'], function () {
     return gulp.watch('scripts/*.ts', ['ts']);
+});
+
+gulp.task('watch.html', ['scriptsNStyles'], function () {
+    return gulp.watch('scripts/*.html', ['scriptsNStyles']);
 });
 
 gulp.task('default', ['scriptsNStyles', 'watch']);

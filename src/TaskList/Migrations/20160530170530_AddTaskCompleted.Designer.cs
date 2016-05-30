@@ -8,9 +8,10 @@ using TaskList.Models;
 namespace TaskList.Migrations
 {
     [DbContext(typeof(TaskListDbContext))]
-    partial class TaskListDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160530170530_AddTaskCompleted")]
+    partial class AddTaskCompleted
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rc2-20901")

@@ -30,10 +30,7 @@ let AppComponent = class AppComponent {
         this.getLists();
         var showDeleteTask = false;
     }
-    getLists() {
-        this.listService.getLists()
-            .subscribe(lists => this.lists = lists);
-    }
+    // Tasks
     showDeleteTaskModal(task, listIndex, taskIndex) {
         this.showDeleteTask = true;
         this.showAddTaskModal = false;
@@ -71,6 +68,24 @@ let AppComponent = class AppComponent {
             this.selectedTask = null;
             delete this.lists[task.listIndex].Tasks.splice(task.taskIndex, 1);
         });
+    }
+    completeTask(task) {
+        this.taskService.complete(task)
+            .then(res => {
+            task.IsCompleted = true;
+        });
+    }
+    uncompleteTask(task) {
+        this.taskService.uncomplete(task)
+            .then(res => {
+            task.IsCompleted = false;
+        });
+        ;
+    }
+    // Lists
+    getLists() {
+        this.listService.getLists()
+            .subscribe(lists => this.lists = lists);
     }
     addList(newList) {
         this.listService.AddList(newList)

@@ -12,5 +12,6 @@ namespace TaskList.Models
         public DateTime DateCreated { get; set; }
         public bool IsDeleted { get; set; }
         public int ListId { get; set; }
+        public bool IsCompleted { get; set; }
     }
 }

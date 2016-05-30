@@ -6,6 +6,7 @@ class Task {
         this.IsDeleted = false;
         this.DateCreated = '';
         this.ListId = 0;
+        this.IsCompleted = false;
         this.taskIndex = 0;
         this.listIndex = 0;
     }

@@ -52,5 +52,29 @@ namespace TaskList.Repositories
             _context.SaveChanges();
             return task;
         }
+
+        public void Complete(int id)
+        {
+            var task = _context.Tasks.Where(x => x.Id == id).FirstOrDefault();
+
+            if(task != null)
+            {
+                task.IsCompleted = true;
+            }
+
+            _context.SaveChanges();
+        }
+
+        public void UnComplete(int id)
+        {
+            var task = _context.Tasks.Where(x => x.Id == id).FirstOrDefault();
+
+            if (task != null)
+            {
+                task.IsCompleted = false;
+            }
+
+            _context.SaveChanges();
+        }
     }
 }
