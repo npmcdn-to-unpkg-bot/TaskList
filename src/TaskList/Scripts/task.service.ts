@@ -19,33 +19,19 @@ export class TaskService {
     //}
 
     addTask(name: string, listId: number) {
-        var task = new Task({
-            Id: null,
-            Name: name,
-            DateCreated: null,
-            IsDeleted: false,
-            ListId: listId
-
-        });
+        var task = new Task();
+        task.Name = name;
+        task.ListId = listId;
 
         let body = JSON.stringify(task);
-        //let headers = new Headers({ 'Content-Type': 'application/json' });
-        //let options = new RequestOptions({ headers: headers });
-
-
-        //this.http.post('api/task', body, options);
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers, body: body });
+        let url = 'api/task/name/' + task.Name + '/listId/' + task.ListId + '';
+        return this.http.post(url, body, options)
+            .map(this.extractData)
+            .toPromise()            
+            .catch(this.handleError);
     }
-
-    //deleteTask(id: number) {
-
-    //    let headers = new Headers();
-    //    headers.append('Content-Type', 'application/json');
-
-    //    let url = 'api/task/' + id + '';
-
-    //    return this.http
-    //        .delete(url, headers);
-    //}
 
     delete(task: Task) {
         let headers = new Headers();
@@ -62,6 +48,11 @@ export class TaskService {
     private handleError(error: any) {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);
+    }
+
+    private extractData(res: Response) {
+        let body = res.json();
+        return body.data || {};
     }
 
 

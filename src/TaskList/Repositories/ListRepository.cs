@@ -38,10 +38,9 @@ namespace TaskList.Repositories
 
         public void Add(List list)
         {
-            if (list.DateCreated == null)
-            {
+           
                 list.DateCreated = DateTime.Now;
-            }
+            
 
             _context.Lists.Add(list);
             _context.SaveChanges();

@@ -35,21 +35,21 @@ namespace TaskList.Repositories
         public void Delete(int id)
         {
             var task = _context.Tasks.Where(x => x.Id == id).FirstOrDefault();
-            if(task != null)
+            if (task != null)
             {
                 task.IsDeleted = true;
                 _context.SaveChanges();
             }
         }
 
-        public void Add(Models.Task task)
+        public Models.Task Add(Models.Task task)
         {
-            if(task.DateCreated == null)
-            {
-                task.DateCreated = DateTime.Now;
-            }
+
+            task.DateCreated = DateTime.Now;
+
             _context.Tasks.Add(task);
             _context.SaveChanges();
+            return task;
         }
     }
 }

@@ -4,12 +4,16 @@
     IsDeleted: boolean;
     DateCreated: any;
     ListId: number;
+    taskIndex: number;
+    listIndex: number;
 
-    constructor(task: Task) {
-        this.Id = task.Id;
-        this.Name = task.Name;
-        this.IsDeleted = task.IsDeleted;
-        this.DateCreated = task.DateCreated;
-        this.ListId = task.ListId;
+    constructor() {
+        this.Id = 0;
+        this.Name = '';
+        this.IsDeleted = false;
+        this.DateCreated = '';
+        this.ListId = 0;
+        this.taskIndex = 0;
+        this.listIndex = 0;
     }
 }

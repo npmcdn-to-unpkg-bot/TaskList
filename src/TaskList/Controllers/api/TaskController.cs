@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskList.Repositories;
 
@@ -32,15 +33,22 @@ namespace TaskList.Controllers.api
             return _taskRepo.GetById(id).FirstOrDefault();
         }
 
-        // POST api/task
-        [HttpPost]
-        public void Post([FromBody]Models.Task task)
+        // POST api/task/name/[name]/listId/[1]
+        [HttpPost("name/{name}/listId/{listId}")]
+        public Models.Task Post(string name, int listId)
         {
-            _taskRepo.Add(task);
+            var task = new Models.Task() {
+                Name = name,
+                DateCreated = DateTime.Now,
+                IsDeleted = false,
+                ListId = listId
+            };   
+            var newTask =          _taskRepo.Add(task);
+            return newTask;
         }
 
         // PUT api/task/5
-        [HttpPut("{id}")]
+        [HttpPut]
         public void Put(int id, [FromBody]string value)
         {
         }

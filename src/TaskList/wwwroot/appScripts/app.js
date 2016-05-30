@@ -9,34 +9,65 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 const core_1 = require('@angular/core');
+const task_1 = require('./task');
 const list_service_1 = require('./list.service');
 const task_service_1 = require('./task.service');
 let AppComponent = class AppComponent {
     constructor(listService, taskService) {
         this.listService = listService;
         this.taskService = taskService;
+        this.showDeleteTask = false;
+        this.showAddTaskModal = false;
+        this.selectedList = {
+            id: 0,
+            listIndex: 0
+        };
+        this.newTask = new task_1.Task();
     }
     ngOnInit() {
         this.getLists();
+        var showDeleteTask = false;
     }
     getLists() {
         this.listService.getLists()
             .subscribe(lists => this.lists = lists);
     }
-    addTask(task, listId) {
-        if (!name) {
+    showDeleteTaskModal(task, listIndex, taskIndex) {
+        this.showDeleteTask = true;
+        this.showAddTaskModal = false;
+        this.selectedTask = task;
+        this.selectedTask.taskIndex = taskIndex;
+        this.selectedTask.listIndex = listIndex;
+    }
+    hideDeleteTaskModal() {
+        this.showDeleteTask = false;
+        this.selectedTask = null;
+    }
+    addTaskModal(listId, listIndex) {
+        this.showAddTaskModal = true;
+        this.showDeleteTask = false;
+        this.selectedList.id = listId;
+        this.selectedList.listIndex = listIndex;
+    }
+    addTask(newTask) {
+        if (newTask.Name.length === 0) {
             return;
         }
-        if (!listId) {
-            return;
-        }
-        this.taskService.addTask(name, listId);
+        this.taskService.addTask(newTask.Name, this.selectedList.id)
+            .then(res => {
+            this.lists[this.selectedList.listIndex].Tasks.push(newTask);
+            this.showAddTaskModal = false;
+            this.newTask = new task_1.Task();
+            this.newTask.Name = '';
+            this.newTask.Id = 0;
+        });
     }
     deleteTask(task) {
         this.taskService.delete(task)
             .then(res => {
-            debugger;
-            this.lists.filter(l => l.Id == task.ListId)[0].Tasks.filter(t => t !== task);
+            this.showDeleteTask = false;
+            this.selectedTask = null;
+            delete this.lists[task.listIndex].Tasks.splice(task.taskIndex, 1);
         });
     }
 };
@@ -45,17 +76,30 @@ AppComponent = __decorate([
         selector: 'my-app',
         template: `<h3>My First Angular 2 App 1</h3>
                 <ul class="lists">
-                    <li *ngFor="let list of lists" class="list">
-                    {{list.Name}}
+                    <li *ngFor="let list of lists; let listIndex = index" class="list">
+                    {{list.Name}} <button type="button" (click)="addTaskModal(list.Id, listIndex)">Add task</button>
 
                         <ul *ngIf="list.Tasks.length > 0">
-                            <li *ngFor="let task of list.Tasks">
+                            <li *ngFor="let task of list.Tasks; let taskIndex = index">
                             {{task.Name}}
-                            <button type="button" (click)="deleteTask(task)">Delete {{task.Name}}</button>
+                            <button type="button" (click)="showDeleteTaskModal(task, listIndex, taskIndex)">Delete {{task.Name}}</button>
                             </li>
                         </ul>                 
                     </li>
                 <ul>
+<div *ngIf="showDeleteTask">
+<h2>Task:{{selectedTask.Name}}</h2>
+<h3>Are you sure you want to delete the task?</h3>
+<button type="button" (click)="deleteTask(selectedTask)">Yes</button>
+<button type="button" (click)="hideDeleteTaskModal()">No</button>
+</div>
+
+<div *ngIf="showAddTaskModal">
+<form (ngSubmit)="addTask(newTask)" #newTaskForm="ngForm">
+<input [(ngModel)]="newTask.Name" required />
+<button type="button" (click)="addTask(newTask)" [disabled]="!newTaskForm.form.valid">Add Task</button>
+</form>
+</div>
 
 `,
         providers: [list_service_1.ListService, task_service_1.TaskService]
