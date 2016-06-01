@@ -2,6 +2,8 @@
 var ts = require('gulp-typescript');
 var gulp = require('gulp');
 var clean = require('gulp-clean');
+var sass = require('gulp-sass');
+//var csso = require('gulp-csso');
 
 var destPath = './wwwroot/libs/';
 
@@ -9,6 +11,12 @@ var destPath = './wwwroot/libs/';
 gulp.task('clean', function () {
     return gulp.src(destPath)
         .pipe(clean());
+});
+gulp.task('sass', function () {
+    gulp.src('./css/main.scss')
+       .pipe(sass().on('error', sass.logError))
+       .pipe(gulp.dest('./wwwroot/css'));
+
 });
 
 gulp.task("scriptsNStyles", () => {
@@ -25,9 +33,7 @@ gulp.task("scriptsNStyles", () => {
     })
         .pipe(gulp.dest("./wwwroot/libs"));
 
-    //gulp.src([
-    //    'node_modules/bootstrap/dist/css/bootstrap.css'
-    //]).pipe(gulp.dest('./wwwroot/libs/css'));
+
 
     gulp.src(['scripts/*.html']).pipe(gulp.dest('./wwwroot/'));
 });
@@ -42,14 +48,18 @@ gulp.task('ts', function (done) {
     return tsResult.js.pipe(gulp.dest('./wwwroot/appScripts'));
 });
 
-gulp.task('watch', ['watch.ts','watch.html']);
+gulp.task('watch', ['watch.ts', 'watch.html', 'watch:sass']);
 
 gulp.task('watch.ts', ['ts'], function () {
     return gulp.watch('scripts/*.ts', ['ts']);
 });
 
-gulp.task('watch.html', ['scriptsNStyles'], function () {
+gulp.task('watch.html', ['scriptsNStyles', 'sass'], function () {
     return gulp.watch('scripts/*.html', ['scriptsNStyles']);
 });
 
-gulp.task('default', ['scriptsNStyles', 'watch']);
+gulp.task('watch:sass', function () {
+    gulp.watch('./css/**/*.scss', ['sass']);
+});
+
+gulp.task('default', ['scriptsNStyles', 'sass', 'watch']);

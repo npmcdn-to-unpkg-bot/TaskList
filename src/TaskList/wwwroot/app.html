@@ -1,5 +1,31 @@
 <h1>Task List</h1>
-<ul class="lists">
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3" *ngFor="let list of lists; let listIndex = index">
+            <div class="list card">
+                {{list.Name}} <button type="button" (click)="addTaskModal(list.Id, listIndex)">Add task</button>
+
+                <ul class="list-group list-group-flush" *ngIf="list.Tasks.length > 0">
+                    <li class="list-group-item" *ngFor="let task of list.Tasks; let taskIndex = index">{{task.Name}} - {{task.IsCompleted}}<button type="button" (click)="showDeleteTaskModal(task, listIndex, taskIndex)">Delete {{task.Name}}</button>
+<button type="button" *ngIf="!task.IsCompleted" (click)="completeTask(task)">Complete Task</button>
+<button type="button" *ngIf="task.IsCompleted" (click)="uncompleteTask(task)">UnComplete Task</button></li>
+                </ul>
+            </div>
+            <!--<ul *ngIf="list.Tasks.length > 0">
+                <li *ngFor="let task of list.Tasks; let taskIndex = index">
+                    {{task.Name}} - {{task.IsCompleted}}
+                    <button type="button" (click)="showDeleteTaskModal(task, listIndex, taskIndex)">Delete {{task.Name}}</button>
+                    <button type="button" *ngIf="!task.IsCompleted" (click)="completeTask(task)">Complete Task</button>
+                    <button type="button" *ngIf="task.IsCompleted" (click)="uncompleteTask(task)">UnComplete Task</button>
+                </li>
+            </ul>-->
+        </div>
+
+    </div>
+
+</div>
+<!--<ul class="lists">
     <li *ngFor="let list of lists; let listIndex = index" class="list">
         {{list.Name}} <button type="button" (click)="addTaskModal(list.Id, listIndex)">Add task</button>
 
@@ -12,7 +38,7 @@
             </li>
         </ul>
     </li>
-</ul>
+</ul>-->
 <div *ngIf="showDeleteTask">
     <h2>Task:{{selectedTask.Name}}</h2>
     <h3>Are you sure you want to delete the task?</h3>
